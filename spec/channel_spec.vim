@@ -9,9 +9,11 @@ describe 'channel'
     Expect expr { channel#connect('localhost:40124') } to_throw 'connection refused'
   end
 
-  it 'can send a cmd to connected server and get a response with ok'
+  it 'can send a cmd to connected server and return a done status'
     let channel = channel#connect('localhost:40123')
-    call channel#send(channel, '{"type":"file", "file":"__tests__/search.spec.js"}')
+    let send_status = channel#send(channel, '{"type":"file", "file":"__tests__/search.spec.js"}')
+
+    Expect send_status == 'done'
   end
 
   it 'will set status to no when send any command'
