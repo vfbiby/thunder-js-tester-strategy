@@ -1,8 +1,11 @@
-describe 'channel'
+describe 'g:channel'
+
+  before
+    let g:channel = channel#connect('localhost:40123')
+  end
 
   it 'can connect to an available host:port server' 
-    let channel = channel#connect('localhost:40123')
-    Expect channel > 0
+    Expect g:channel > 0
   end
 
   it 'will get a exception when connect a unavailable host:port server' 
@@ -10,16 +13,14 @@ describe 'channel'
   end
 
   it 'can send a cmd to connected server and return a done status'
-    let channel = channel#connect('localhost:40123')
-    let send_status = channel#send(channel, '{"type":"file", "file":"__tests__/search.spec.js"}')
+    let send_status = channel#send(g:channel, '{"type":"file", "file":"__tests__/search.spec.js"}')
 
     Expect send_status == 'done'
   end
 
   it 'will set status to no when send any command'
     let g:status = ''
-    let channel = channel#connect('localhost:40123')
-    call channel#send(channel, '{"type":"file", "file":"__tests__/search.spec.js"}')
+    call channel#send(g:channel, '{"type":"file", "file":"__tests__/search.spec.js"}')
 
     Expect g:status == 'no'
   end
@@ -28,7 +29,7 @@ describe 'channel'
     let g:status = ''
 
     function! ReceiveStatus(...)
-      let g:status = 'ok'
+      let g:status = a:2[0]
     endfunction
 
     let channel = channel#connect('localhost:40123', function('ReceiveStatus'))
