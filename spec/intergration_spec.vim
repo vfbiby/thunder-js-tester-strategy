@@ -9,22 +9,22 @@ describe 'thunder js tester strategy'
     Expect send_status == 'done'
     Expect g:status == 'no'
 
-    sleep 10m "wait for server respose
+    "wait for server respose
+    sleep 10m 
+
     Expect g:status == 'ok'
   end
 
   it 'will reconnect to mocha server when responsed status is not ok'
+    let g:status = ''
     call JavascriptMochaStratey('mocha __tests__/search.spec.js')
-    Expect g:status == 'no'
-
-    sleep 10m "wait for server respose
     Expect g:status == 'ok'
 
-    call channel#send(g:channel_id, 'close connection!')
-    call JavascriptMochaStratey('mocha __tests__/search.spec.js')
-    Expect g:status == 'no'
+    "tell the server to close the connection
+    call channel#send(g:channel_id, 'close connection!') 
 
-    sleep 10m "wait for server respose
+    let g:status = ''
+    call JavascriptMochaStratey('mocha __tests__/search.spec.js')
     Expect g:status == 'ok'
   end
 end
