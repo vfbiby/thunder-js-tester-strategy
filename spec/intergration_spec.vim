@@ -1,10 +1,6 @@
-describe 'thunder js tester strategy'
+source plugin/js-strategy.vim
 
-  before
-    function! ReceiveStatus(...)
-      let g:status = 'ok'
-    endfunction
-  end
+describe 'thunder js tester strategy'
 
   it 'can connect tester server and send test command'
     let channel = channel#connect('localhost:40123', function('ReceiveStatus'))
@@ -13,8 +9,22 @@ describe 'thunder js tester strategy'
     Expect send_status == 'done'
     Expect g:status == 'no'
 
-    sleep 10m
+    sleep 10m "wait for server respose
     Expect g:status == 'ok'
   end
 
+  it 'will reconnect to mocha server when responsed status is not ok'
+    call JavascriptMochaStratey('mocha __tests__/search.spec.js')
+    Expect g:status == 'no'
+
+    sleep 10m "wait for server respose
+    Expect g:status == 'ok'
+
+    call channel#send(g:channel_id, 'close connection!')
+    call JavascriptMochaStratey('mocha __tests__/search.spec.js')
+    Expect g:status == 'no'
+
+    sleep 10m "wait for server respose
+    Expect g:status == 'ok'
+  end
 end
