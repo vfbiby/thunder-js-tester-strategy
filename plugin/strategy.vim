@@ -1,15 +1,13 @@
 function! ReceiveStatus(...)
-  let g:status = a:2[0]
+  let g:status = 'ok'
 endfunction
 
 function! ConnectToMochaServer()
   let g:channel_id = channel#connect('localhost:40123', function('ReceiveStatus'))
 endfunction
 
-call ConnectToMochaServer()
-
-function! JavascriptMochaStratey(cmd)
-  if !g:channel_id
+function! strategy#JavascriptMochaStratey(cmd)
+  if !exists('g:channel_id')
     call ConnectToMochaServer()
   end
 
