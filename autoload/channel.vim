@@ -1,14 +1,23 @@
 function! channel#connect(host, ...)
-  if a:0
+  if a:0 && has('nvim')
     return sockconnect('tcp', a:host, {'on_data': a:1})
   endif
 
-  return sockconnect('tcp', a:host)
+  if has('nvim')
+    return sockconnect('tcp', a:host)
+  end
+
+  return ch_open(a:host)
 endfunction
 
-function! channel#send(channel, cmd)
+function! channel#send(channel, cmd, ...)
   let g:status = 'no' 
-  call chansend(a:channel, a:cmd)
 
+  if has('nvim')
+    call chansend(a:channel, a:cmd)
+    return 'done'
+  end
+
+  call ch_sendraw(a:channel, a:cmd)
   return 'done'
 endfunction
