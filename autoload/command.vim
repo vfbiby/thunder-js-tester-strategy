@@ -1,7 +1,6 @@
 function! command#transform(cmd)
-  let pattern = '__tests__.*.js'
-  let testFileName =  matchstr(a:cmd, pattern)
-  let testTitle = matchstr(a:cmd, '\^.*\$')[1:-2]
+  let testFileName =  command#getFileName(a:cmd)
+  let testTitle = command#getTitle(a:cmd)
   let testSuite = matchstr(testFileName, '*..*.js')
 
   if strlen(testTitle) != 0
@@ -13,4 +12,12 @@ function! command#transform(cmd)
   end
 
   return "{\"type\":\"file\", \"file\":\"". testFileName ."\"}"        
+endfunction
+
+function command#getFileName(cmd)
+  return split(a:cmd)[1]
+endfunction
+
+function command#getTitle(cmd)
+  return matchstr(a:cmd, '\^.*\$')[1:-2]
 endfunction
