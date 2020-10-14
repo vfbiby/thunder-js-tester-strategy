@@ -1,9 +1,9 @@
-source spec/help.vim
+source spec/helpers.vim
 
 describe 'in vim g:channel'
 
   before
-    let g:channel = channel#connect('localhost:40123')
+    let g:channel = channel#connect('localhost:40124')
   end
 
   it 'can connect to an available host:port server' 

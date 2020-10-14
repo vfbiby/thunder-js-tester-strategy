@@ -10,6 +10,14 @@ function! channel#connect(host, ...)
   return ch_open(a:host)
 endfunction
 
+function! channel#autoconnect(...)
+  if !filereadable('.mochaserverrc.js')
+    return channel#connect('localhost:40123', a:1)
+  endif
+
+  return  channel#connect('localhost:' . json_decode(readfile('.mochaserverrc.js'))['port'], a:1)
+endfunction
+
 function! channel#send(channel, cmd, ...)
   let g:status = 'no' 
 

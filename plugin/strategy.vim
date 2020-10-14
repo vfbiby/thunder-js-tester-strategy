@@ -3,7 +3,7 @@ function! ReceiveStatus(...)
 endfunction
 
 function! ConnectToMochaServer()
-  let g:channel_id = channel#connect('localhost:40123', function('ReceiveStatus'))
+  let g:channel_id = channel#autoconnect(function('ReceiveStatus'))
 endfunction
 
 function! WaitForResponse()

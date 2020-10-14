@@ -1,9 +1,9 @@
-source spec/help.vim
+source spec/helpers.vim
 
 describe 'in neovim g:channel'
 
   before
-    let g:channel = channel#connect('localhost:40123')
+    let g:channel = channel#connect('localhost:40124')
   end
 
   it 'can connect to an available host:port server' 
@@ -13,7 +13,7 @@ describe 'in neovim g:channel'
 
   it 'will get a exception when connect a unavailable host:port server' 
     call SkipTestInVim()
-    Expect expr { channel#connect('localhost:40124') } to_throw 'connection refused'
+    Expect expr { channel#connect('localhost:40126') } to_throw 'connection refused'
   end
 
   it 'can send a cmd to connected server and return a done status'
@@ -39,7 +39,7 @@ describe 'in neovim g:channel'
       let g:status = a:2[0]
     endfunction
 
-    let channel = channel#connect('localhost:40123', function('ReceiveStatus'))
+    let channel = channel#connect('localhost:40124', function('ReceiveStatus'))
     call channel#send(channel, '{"type":"file", "file":"__tests__/search.spec.js"}')
     sleep 10m
 
