@@ -1,5 +1,5 @@
 function! command#transform(cmd)
-  let testFileName =  command#getFileName(a:cmd)
+  let testFileName =  command#getFilePath(a:cmd)
   let testTitle = command#getTitle(a:cmd)
   let testSuite = matchstr(testFileName, '*..*.js')
 
@@ -14,7 +14,7 @@ function! command#transform(cmd)
   return "{\"type\":\"file\", \"file\":\"". testFileName ."\"}"        
 endfunction
 
-function command#getFileName(cmd)
+function command#getFilePath(cmd)
   return split(a:cmd)[1]
 endfunction
 
