@@ -10,12 +10,12 @@ function! channel#connect(host, ...)
   return ch_open(a:host)
 endfunction
 
-function! channel#autoconnect(...)
+function! channel#autoconnect(receive_status_cb)
   if !filereadable('.mochaserverrc.js')
-    return channel#connect('localhost:40123', a:1)
+    return channel#connect('localhost:40123', a:receive_status_cb)
   endif
 
-  return  channel#connect('localhost:' . json_decode(readfile('.mochaserverrc.js'))['port'], a:1)
+  return  channel#connect('localhost:' . json_decode(readfile('.mochaserverrc.js'))['port'], a:receive_status_cb)
 endfunction
 
 function! channel#send(channel, cmd, ...)
